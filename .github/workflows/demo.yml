@@ -19,7 +19,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      script-file: ${{ steps.publish.outputs.archivo_encontrado}}
+      mi-output: ${{ steps.publish.outputs.archivo_encontrado}} # el output del step publish para usar en otro job 
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -47,6 +47,6 @@ jobs:
         run: ls
       - name: Output filename
         run: |
-          echo "El archivo JavaScript es: ${{ needs.build.outputs.script-file }}"
+          echo "El archivo JavaScript es: ${{ needs.build.outputs.mi-output }}"
       - name: Deploy
         run: echo "Deploying..."
