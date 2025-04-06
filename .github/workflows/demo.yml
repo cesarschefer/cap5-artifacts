@@ -19,7 +19,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      script-file: ${{steps.publish.outputs.archivo_encontrado }}
+      script-file: ${{ steps.publish.outputs.script-file }}  # Aquí se define correctamente el output
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -29,15 +29,14 @@ jobs:
         run: npm run build
       - name: Publish JS filename
         id: publish
-        run: find dist/assets/*.js -type f -exec echo "archivo_encontrado {}" \; >> $GITHUB_OUTPUT
+        run: |
+          FILES=$(find dist/assets/*.js -type f -exec echo "archivo_encontrado {}" \;)
+          echo "script-file=$FILES" >> $GITHUB_ENV  # Usamos GITHUB_ENV para pasar la salida entre pasos
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
           path: dist
-          #path: |
-          #  dist
-          #  package.json
   deploy:
     needs: build
     runs-on: ubuntu-latest
